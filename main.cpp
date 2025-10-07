@@ -4,6 +4,6 @@ using namespace std;
 
 int main()
 {
-    cout << "Sybau niggas" << endl;
+    cout << "Sybau niggas you made it nigga you made it" << endl;
     return 0;
 }
