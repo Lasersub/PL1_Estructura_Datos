@@ -332,3 +332,4 @@ void Editorial::mostrar_menu() const {
     cout << "-------------------------------------------------------" << endl;
     cout << "Seleccione una opción: ";
 }
+// COMENTARIO
