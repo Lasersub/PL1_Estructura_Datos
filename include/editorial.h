@@ -60,4 +60,9 @@ public:
     void mostrar();
 };
 
+
+// --- Funciones auxiliares ---
+
+void mostrar_menu();
+
 #endif // EDITORIAL_H
