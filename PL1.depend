@@ -8,3 +8,13 @@
 	<cstdlib>
 	<ctime>
 
+1760877438 source:c:\users\user\documents\github\pl1_estructura_datos\main.cpp
+	"editorial.h"
+
+1760877385 c:\users\user\documents\github\pl1_estructura_datos\include\editorial.h
+	<iostream>
+	<string>
+
+1760877438 source:c:\users\user\documents\github\pl1_estructura_datos\src\editorial.cpp
+	"editorial.h"
+

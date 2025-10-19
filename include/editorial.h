@@ -65,4 +65,5 @@ public:
 
 void mostrar_menu();
 
+void generar_pedidos(int n_pedidos)();
 #endif // EDITORIAL_H
