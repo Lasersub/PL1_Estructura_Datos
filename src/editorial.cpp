@@ -1,188 +1,156 @@
 #include "editorial.h"
-
-
 using namespace std;
 
-
 //========================
-//    GESTIÓN DE PILAS
+//       NODO
 //========================
 
-NodoPila::NodoPila()
+Nodo::Nodo(Pedido p, Nodo *sig)
 {
-    valor=0;
-    siguiente=NULL;
-    //ctor
-}
-
-NodoPila::NodoPila(int v, NodoPila *sig)
-{
-    valor = v;
+    dato = p;
     siguiente = sig;
 }
 
-NodoPila::~NodoPila()
-{
-    //dtor
-}
-
+//========================
+//        PILA
+//========================
 
 Pila::Pila()
 {
-    cima = NULL;
+    cima = nullptr;
 }
 
 Pila::~Pila()
 {
-    while(cima) desapilar();
+    while (!esVacia())
+        desapilar();
 }
 
 bool Pila::esVacia()
 {
-    return cima == NULL;
+    return cima == nullptr;
 }
 
-void Pila::apilar(int v)
+void Pila::apilar(Pedido p)
 {
-    pnodo nuevo = new NodoPila(v,cima);
-    //comienzo de la pila nevo nodo
+    Nodo *nuevo = new Nodo(p, cima);
     cima = nuevo;
 }
 
-void Pila::desapilar()
+Pedido Pila::desapilar()
 {
-    pnodo nodo; //puntero aux para manipular el nodo
-    if(cima)
+    Pedido p{};
+    if (!esVacia())
     {
-        nodo = cima;
-        cima = nodo->siguiente;
-        delete nodo;
+        Nodo *aux = cima;
+        p = aux->dato;
+        cima = aux->siguiente;
+        delete aux;
     }
+    return p;
 }
 
-int Pila::mostrar()
+void Pila::mostrar()
 {
-    if(esVacia())
+    if (esVacia())
     {
-        cout << "Pila vacia"<<endl;
+        cout << "Pila vacía" << endl;
     }
     else
     {
-        cout << "Cima pila: "<< cima->valor<<endl;
-    }
-    return 0;
-}
-
-
-//========================
-//    GESTIÓN DE COLAS
-//========================
-
-NodoCola::NodoCola()
-{
-    elemento='0';
-    siguiente=NULL;
-//constructor por defecto
-}
-NodoCola::NodoCola(char e, NodoCola*sig )
-{
-    elemento = e;
-    siguiente = sig;
-}
-NodoCola::~NodoCola()
-{
-//dtor
-}
-
-
-Cola::Cola()
-{
-    primero = NULL;
-    ultimo = NULL;
-    longitud = 0;
-}
-Cola::~Cola() { }
-void Cola::encolar(char elemento)
-{
-    NodoCola *nuevo_nodo = new
-    NodoCola(elemento);
-    if(es_vacia())
-    {
-        primero = nuevo_nodo;
-        ultimo = nuevo_nodo;
-    }
-    else
-    {
-        ultimo->siguiente = nuevo_nodo;
-        ultimo = nuevo_nodo;
-    }
-    longitud++;
-}
-
-char Cola::desencolar()
-{
-    if(!es_vacia())
-    {
-        char elemento = primero->elemento;
-        NodoCola *aux = primero;
-        if((primero == ultimo) && (primero->siguiente == NULL))
-        {
-            primero = NULL;
-            ultimo = NULL;
-            aux->siguiente = NULL;
-            delete(aux);
-        }
-        else
-        {
-            primero = primero->siguiente;
-            aux->siguiente = NULL;
-            delete(aux);
-        }
-        longitud--;
-        return elemento;
-    }
-}
-char Cola::inicio()
-{
-    if(!es_vacia())
-    {
-        return primero->elemento;
-    }
-}
-char Cola::fin()
-{
-    if(!es_vacia())
-    {
-        return ultimo->elemento;
-    }
-}
-int Cola::get_longitud()
-{
-    return longitud;
-}
-bool Cola::es_vacia()
-{
-    return ((primero == NULL) && (ultimo ==
-                                  NULL));
-}
-void Cola::mostrarCola()
-{
-    NodoCola *aux = primero;
-    if (es_vacia())
-    {
-        cout<<"Cola Vacía: "<<endl;
-    }
-    else
-    {
-        cout<<"Datos de la Cola: "<<endl;
+        cout << "Contenido de la pila:" << endl;
+        Nodo *aux = cima;
         while (aux)
         {
-            cout << aux->elemento<<endl;
+            cout << "ID Editorial: " << aux->dato.id_editorial << endl;
+            cout << "ID Pedido:    " << aux->dato.id_pedido << endl;
+            cout << "Código Libro: " << aux->dato.cod_libro << endl;
+            cout << "Materia:      " << aux->dato.materia << endl;
+            cout << "Unidades:     " << aux->dato.unidades << endl;
+            cout << "Estado:       " << aux->dato.estado << endl;
+            cout << "---------------------------" << endl;
             aux = aux->siguiente;
         }
     }
 }
 
+//========================
+//         COLA
+//========================
 
+Cola::Cola()
+{
+    primero = nullptr;
+    ultimo = nullptr;
+}
 
-// COMENTARIO
+Cola::~Cola()
+{
+    while (!esVacia())
+        desencolar();
+}
+
+void Cola::encolar(Pedido p)
+{
+    Nodo *nuevo = new Nodo(p);
+    if (esVacia())
+    {
+        primero = nuevo;
+        ultimo = nuevo;
+    }
+    else
+    {
+        ultimo->siguiente = nuevo;
+        ultimo = nuevo;
+    }
+}
+
+Pedido Cola::desencolar()
+{
+    Pedido p{};
+    if (!esVacia())
+    {
+        Nodo *aux = primero;
+        p = aux->dato;
+        if (primero == ultimo)
+        {
+            primero = nullptr;
+            ultimo = nullptr;
+        }
+        else
+        {
+            primero = primero->siguiente;
+        }
+        delete aux;
+    }
+    return p;
+}
+
+bool Cola::esVacia()
+{
+    return primero == nullptr;
+}
+
+void Cola::mostrar()
+{
+    if (esVacia())
+    {
+        cout << "Cola vacía" << endl;
+    }
+    else
+    {
+        cout << "Contenido de la cola:" << endl;
+        Nodo *aux = primero;
+        while (aux)
+        {
+            cout << "ID Editorial: " << aux->dato.id_editorial << endl;
+            cout << "ID Pedido:    " << aux->dato.id_pedido << endl;
+            cout << "Código Libro: " << aux->dato.cod_libro << endl;
+            cout << "Materia:      " << aux->dato.materia << endl;
+            cout << "Unidades:     " << aux->dato.unidades << endl;
+            cout << "Estado:       " << aux->dato.estado << endl;
+            cout << "---------------------------" << endl;
+            aux = aux->siguiente;
+        }
+    }
+}
