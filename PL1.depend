@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1760439775 source:c:\users\oscar\desktop\pl1_estructura_datos\main.cpp
+	"editorial.h"
+
+1760440048 c:\users\oscar\desktop\pl1_estructura_datos\include\editorial.h
+	<iostream>
+	<string>
+	<cstdlib>
+	<ctime>
+
