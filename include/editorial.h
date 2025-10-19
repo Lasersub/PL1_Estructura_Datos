@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include <queue>
+
+using namespace std;
 
 //Struct pedido que define la clase central que sera el pedido
 struct Pedido {
@@ -61,9 +64,19 @@ public:
 };
 
 
+// Cola global
+extern std::queue<Pedido> cola_pedidos;
+
+
 // --- Funciones auxiliares ---
 
 void mostrar_menu();
 
-void generar_pedidos(int n_pedidos)();
+void generar_pedidos(int n_pedidos);
+
+void mostrar_estado_sistema(queue<Pedido> cola_pedidos);
+
+
+
+
 #endif // EDITORIAL_H
