@@ -4,9 +4,16 @@
 #include <iostream>
 #include <string>
 
+struct Pedido {
+    int id_editorial;
+    std::string id_pedido;
+    std::string cod_libro;
+    std::string materia;
+    int unidades;
+    std::string estado;
+};
 
-class NodoPila
-{
+class NodoPila{
 private:
     int valor;
     NodoPila *siguiente;
@@ -62,4 +69,6 @@ public:
     bool es_vacia();
     void mostrarCola(); //No es correcto, se implementa para ver que está creada correctamente
 };
+
+#endif EDITORIAL_H
 
