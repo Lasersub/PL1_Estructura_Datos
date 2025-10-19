@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+//Struct pedido que define la clase central que sera el pedido
 struct Pedido {
     int id_editorial;
     std::string id_pedido;
@@ -13,62 +14,50 @@ struct Pedido {
     std::string estado;
 };
 
-class NodoPila{
-private:
-    int valor;
-    NodoPila *siguiente;
-    friend class Pila;
-public:
-    NodoPila();
-    NodoPila(int v, NodoPila *sig = NULL);
-    ~NodoPila();
-};
 
-typedef NodoPila *pnodo;
+// Un solo Nodo que almacena un Pedido. Asi no tenemos que hacer NodoPila y NodoCola ya que seria redundancia
+class Nodo
+{
+private:
+    Pedido dato;
+    Nodo *siguiente;
+
+    // Es friend
+    friend class Pila;
+    friend class Cola;
+
+public:
+    // El constructor ahora recibe un Pedido
+    Nodo(Pedido p, Nodo *sig = NULL);
+};
 
 
 class Pila
 {
 private:
-    pnodo cima;
+    Nodo *cima; // Usamos nuestro Nodo genérico
 public:
     Pila();
     ~Pila();
     bool esVacia();
-    void apilar(int v);
-    void desapilar();
-    int mostrar();
-};
-
-class NodoCola
-{
-    friend class Cola;
-private:
-    NodoCola *siguiente;
-    char elemento;
-public:
-    NodoCola();
-    NodoCola(char e, NodoCola*sig = NULL);
-    ~NodoCola();
+    void apilar(Pedido p); // Recibe un Pedido
+    Pedido desapilar(); // Devuelve un Pedido
+    void mostrar(); // Modificado para mostrar pedidos
 };
 
 
 class Cola
 {
 private:
-    NodoCola * primero;
-    NodoCola * ultimo;
-    int longitud;
+    Nodo *primero; // Usamos nuestro Nodo genérico
+    Nodo *ultimo;
 public:
     Cola();
     ~Cola();
-    void encolar(char);
-    char inicio();
-    char fin();
-    char desencolar();
-    bool es_vacia();
-    void mostrarCola(); //No es correcto, se implementa para ver que está creada correctamente
+    void encolar(Pedido p); // Recibe un Pedido
+    Pedido desencolar(); // Devuelve un Pedido
+    bool esVacia(); // Renombrado de 'es_vacia' para consistencia
+    void mostrar();
 };
 
-#endif EDITORIAL_H
-
+#endif // EDITORIAL_H
