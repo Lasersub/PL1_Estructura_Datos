@@ -261,7 +261,30 @@ void mostrar_estado_sistema(queue<Pedido> cola_original)
     }
     else
     {
-        cout << "\n\n\n----------------------------------------------------------" << endl;
+        // Colas para clasificar los pedidos por estado
+        queue<Pedido> q_iniciado;
+        queue<Pedido> q_almacen;
+        queue<Pedido> q_imprenta;
+        queue<Pedido> q_listo;
+
+        // Clasificar los pedidos según su estado
+        while (!cola_original.empty())
+        {
+            Pedido p = cola_original.front();
+            cola_original.pop();
+
+            if (p.estado == "Iniciado")
+                q_iniciado.push(p);
+            else if (p.estado == "Almacen")
+                q_almacen.push(p);
+            else if (p.estado == "Imprenta")
+                q_imprenta.push(p);
+            else if (p.estado == "Listo")
+                q_listo.push(p);
+        }
+
+        cout << "\n\nQIniciado" << endl;
+        cout << "----------------------------------------------------------" << endl;
         cout << left << setw(6) << "Lib"
              << setw(10) << "Id"
              << setw(10) << "Codigo"
@@ -270,11 +293,15 @@ void mostrar_estado_sistema(queue<Pedido> cola_original)
              << setw(10) << "Estado     |" << endl;
         cout << "----------------------------------------------------------" << endl;
 
-        while (!cola_original.empty())
+        if (q_iniciado.empty())
         {
-            Pedido p = cola_original.front();
-            cola_original.pop();
+            cout << "(Vacia)" << endl;
+        }
 
+        while (!q_iniciado.empty())
+        {
+            Pedido p = q_iniciado.front();
+            q_iniciado.pop();
             cout << left << setw(6) << p.id_editorial
                  << setw(10) << p.id_pedido
                  << setw(10) << p.cod_libro
@@ -282,6 +309,88 @@ void mostrar_estado_sistema(queue<Pedido> cola_original)
                  << setw(5) << p.unidades
                  << setw(10) << p.estado << " |" << endl;
         }
+
+        cout << "\n\nQAlmacen" << endl;
+        cout << "----------------------------------------------------------" << endl;
+        cout << left << setw(6) << "Lib"
+             << setw(10) << "Id"
+             << setw(10) << "Codigo"
+             << setw(15) << "Materia"
+             << setw(5) << "U"
+             << setw(10) << "Estado     |" << endl;
+        cout << "----------------------------------------------------------" << endl;
+
+        if (q_almacen.empty())
+        {
+            cout << "(Vacia)" << endl;
+        }
+
+        while (!q_almacen.empty())
+        {
+            Pedido p = q_almacen.front();
+            q_almacen.pop();
+            cout << left << setw(6) << p.id_editorial
+                 << setw(10) << p.id_pedido
+                 << setw(10) << p.cod_libro
+                 << setw(15) << p.materia
+                 << setw(5) << p.unidades
+                 << setw(10) << p.estado << " |" << endl;
+        }
+
+        cout << "\n\nQImprenta" << endl;
+        cout << "----------------------------------------------------------" << endl;
+        cout << left << setw(6) << "Lib"
+             << setw(10) << "Id"
+             << setw(10) << "Codigo"
+             << setw(15) << "Materia"
+             << setw(5) << "U"
+             << setw(10) << "Estado     |" << endl;
+        cout << "----------------------------------------------------------" << endl;
+
+        if (q_imprenta.empty())
+        {
+            cout << "(Vacia)" << endl;
+        }
+
+        while (!q_imprenta.empty())
+        {
+            Pedido p = q_imprenta.front();
+            q_imprenta.pop();
+            cout << left << setw(6) << p.id_editorial
+                 << setw(10) << p.id_pedido
+                 << setw(10) << p.cod_libro
+                 << setw(15) << p.materia
+                 << setw(5) << p.unidades
+                 << setw(10) << p.estado << " |" << endl;
+        }
+
+        cout << "\n\nQListo" << endl;
+        cout << "----------------------------------------------------------" << endl;
+        cout << left << setw(6) << "Lib"
+             << setw(10) << "Id"
+             << setw(10) << "Codigo"
+             << setw(15) << "Materia"
+             << setw(5) << "U"
+             << setw(10) << "Estado     |" << endl;
+        cout << "----------------------------------------------------------" << endl;
+
+        if (q_listo.empty())
+        {
+            cout << "(Vacia)" << endl;
+        }
+
+        while (!q_listo.empty())
+        {
+            Pedido p = q_listo.front();
+            q_listo.pop();
+            cout << left << setw(6) << p.id_editorial
+                 << setw(10) << p.id_pedido
+                 << setw(10) << p.cod_libro
+                 << setw(15) << p.materia
+                 << setw(5) << p.unidades
+                 << setw(10) << p.estado << " |" << endl;
+        }
+
     }
     cout << "\n\n\n" << endl;
 }
