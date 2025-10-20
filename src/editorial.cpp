@@ -58,25 +58,24 @@ Pedido Pila::desapilar()
 
 void Pila::mostrar()
 {
-    if (esVacia())
-    {
-        cout << "Pila vacía" << endl;
+    if (esVacia()) {
+        cout << "(Pila vacia)";
+        return;
     }
-    else
-    {
-        cout << "Contenido de la pila:" << endl;
-        Nodo *aux = cima;
-        while (aux)
-        {
-            cout << "ID Editorial: " << aux->dato.id_editorial << endl;
-            cout << "ID Pedido:    " << aux->dato.id_pedido << endl;
-            cout << "Código Libro: " << aux->dato.cod_libro << endl;
-            cout << "Materia:      " << aux->dato.materia << endl;
-            cout << "Unidades:     " << aux->dato.unidades << endl;
-            cout << "Estado:       " << aux->dato.estado << endl;
-            cout << "---------------------------" << endl;
-            aux = aux->siguiente;
-        }
+
+    Nodo *aux = cima;
+    Pila temporal; // Usamos una pila temporal para imprimir en el orden correcto
+
+    // Pasamos todos los elementos a una pila temporal para invertir el orden
+    while (aux) {
+        temporal.apilar(aux->dato);
+        aux = aux->siguiente;
+    }
+
+    // Ahora imprimimos desde la pila temporal para verlos desde el fondo a la cima
+    cout << "Pedidos en la caja: ";
+    while(!temporal.esVacia()){
+        cout << temporal.desapilar().id_pedido << " ";
     }
 }
 
@@ -160,6 +159,43 @@ void Cola::mostrar()
         }
     }
 }
+
+void Cola::mostrarConFormatoDeTabla()
+{
+    // 1. Imprimir la cabecera de la tabla
+    cout << "------------------------------------------------------------------" << endl;
+    cout << left << setw(6) << "Lib"
+         << setw(10) << "Id"
+         << setw(10) << "Codigo"
+         << setw(15) << "Materia"
+         << setw(5) << "U"
+         << setw(10) << "Estado" << "|" << endl;
+    cout << "------------------------------------------------------------------" << endl;
+
+    // 2. Comprobar si la cola está vacía
+    if (esVacia())
+    {
+        cout << "(Vacia)" << endl;
+    }
+    else
+    {
+        // 3. Recorrer la cola e imprimir cada pedido
+        Nodo *aux = primero;
+        while (aux)
+        {
+            Pedido p = aux->dato;
+            cout << left << setw(6) << p.id_editorial
+                 << setw(10) << p.id_pedido
+                 << setw(10) << p.cod_libro
+                 << setw(15) << p.materia
+                 << setw(5) << p.unidades
+                 << setw(10) << p.estado << "|" << endl;
+            aux = aux->siguiente;
+        }
+    }
+    cout << "------------------------------------------------------------------" << endl;
+}
+
 // Muestra el menú principal al usuario
 void mostrar_menu()
 {
@@ -179,9 +215,16 @@ void mostrar_menu()
 //        OPCIÓN 1
 //========================
 
+Editorial::Editorial() {
+    srand(time(NULL)); // Inicializamos la semilla para números aleatorios una sola vez
+    ultimoIdPedido = 21508; // Ponemos un valor inicial para los IDs de pedido
+    inicializarCatalogo(); // Llamamos al método privado para llenar el stock
+    std::cout << ">> Sistema de la editorial listo para operar. <<" << std::endl;
+}
 
-// Cola global para guardar los pedidos
-std::queue<Pedido> cola_pedidos;
+Editorial::~Editorial() {
+
+}
 
 // Array del catalogo de libros disponibles
 void Editorial::inicializarCatalogo() {
@@ -263,7 +306,13 @@ void Editorial::generarPedidos(int n) {
 //========================
 
 
-
+void Editorial::ejecutarPasoSimulacion()
+{
+    // --- LÓGICA PRINCIPAL DE LA SIMULACIÓN ---
+    // Esta es la función más importante que tienes que desarrollar.
+    // Aquí moverás los pedidos de una cola a otra (de Iniciado a Almacén, etc.)
+    cout << "\n[AVISO] La funcion 'ejecutarPasoSimulacion' aun no ha sido implementada.\n" << endl;
+}
 
 
 
@@ -271,146 +320,73 @@ void Editorial::generarPedidos(int n) {
 //        OPCIÓN 3
 //========================
 
-
-void mostrar_estado_sistema(queue<Pedido> cola_original)
+void Editorial::mostrarEstadoSistema()
 {
-    if (cola_original.empty())
-    {
-        cout << "\n[ERROR] No existe ningun pedido actualmente";
+    cout << "\n<<<<<<<<<<<<<<<<<< ESTADO DEL SISTEMA >>>>>>>>>>>>>>>>>>\n" << endl;
+
+    // --- 1. MOSTRAR COLAS DE PEDIDOS ---
+    cout << "== QIniciado ==" << endl;
+    colaIniciado.mostrarConFormatoDeTabla();
+    cout << endl;
+
+    cout << "== QAlmacen ==" << endl;
+    colaAlmacen.mostrarConFormatoDeTabla();
+    cout << endl;
+
+    cout << "== QImprenta ==" << endl;
+    colaImprenta.mostrarConFormatoDeTabla();
+    cout << endl;
+
+    cout << "== QListo ==" << endl;
+    colaListo.mostrarConFormatoDeTabla();
+    cout << endl;
+
+    // --- 2. MOSTRAR STOCK DEL CATÁLOGO ---
+    cout << "== STOCK ==" << endl;
+    cout << "------------------------------------" << endl;
+    cout << left << setw(10) << "Codigo" << setw(15) << "Materia" << "Unidades" << endl;
+    cout << "------------------------------------" << endl;
+    for (int i = 0; i < MAX_TITULOS; i++) {
+        cout << left << setw(10) << catalogo[i].cod_libro
+             << setw(15) << catalogo[i].materia
+             << catalogo[i].stock << endl; // Asumiendo que tu struct Libro tiene 'stock'
     }
-    else
-    {
-        // Colas para clasificar los pedidos por estado
-        queue<Pedido> q_iniciado;
-        queue<Pedido> q_almacen;
-        queue<Pedido> q_imprenta;
-        queue<Pedido> q_listo;
+    cout << "------------------------------------\n" << endl;
 
-        // Clasificar los pedidos según su estado
-        while (!cola_original.empty())
-        {
-            Pedido p = cola_original.front();
-            cola_original.pop();
-
-            if (p.estado == "Iniciado")
-                q_iniciado.push(p);
-            else if (p.estado == "Almacen")
-                q_almacen.push(p);
-            else if (p.estado == "Imprenta")
-                q_imprenta.push(p);
-            else if (p.estado == "Listo")
-                q_listo.push(p);
+    // --- 3. MOSTRAR ESTADO DE LAS CAJAS ---
+    cout << "== CAJAS (pilas por libreria) ==" << endl;
+    cout << "------------------------------------------------------------------" << endl;
+    bool algunaCajaConPedidos = false;
+    for (int i = 0; i < LIBRERIAS; i++) {
+        if (!cajas[i].esVacia()) { // 'cajas' es el array de Pilas de la clase Editorial
+            cout << "Libreria " << i << ": ";
+            cajas[i].mostrar(); // Usamos el método mostrar() de Pila, que deberás ajustar
+            cout << endl;
+            algunaCajaConPedidos = true;
         }
-
-        cout << "\n\nQIniciado" << endl;
-        cout << "----------------------------------------------------------" << endl;
-        cout << left << setw(6) << "Lib"
-             << setw(10) << "Id"
-             << setw(10) << "Codigo"
-             << setw(15) << "Materia"
-             << setw(5) << "U"
-             << setw(10) << "Estado     |" << endl;
-        cout << "----------------------------------------------------------" << endl;
-
-        if (q_iniciado.empty())
-        {
-            cout << "(Vacia)" << endl;
-        }
-
-        while (!q_iniciado.empty())
-        {
-            Pedido p = q_iniciado.front();
-            q_iniciado.pop();
-            cout << left << setw(6) << p.id_editorial
-                 << setw(10) << p.id_pedido
-                 << setw(10) << p.cod_libro
-                 << setw(15) << p.materia
-                 << setw(5) << p.unidades
-                 << setw(10) << p.estado << " |" << endl;
-        }
-
-        cout << "\n\nQAlmacen" << endl;
-        cout << "----------------------------------------------------------" << endl;
-        cout << left << setw(6) << "Lib"
-             << setw(10) << "Id"
-             << setw(10) << "Codigo"
-             << setw(15) << "Materia"
-             << setw(5) << "U"
-             << setw(10) << "Estado     |" << endl;
-        cout << "----------------------------------------------------------" << endl;
-
-        if (q_almacen.empty())
-        {
-            cout << "(Vacia)" << endl;
-        }
-
-        while (!q_almacen.empty())
-        {
-            Pedido p = q_almacen.front();
-            q_almacen.pop();
-            cout << left << setw(6) << p.id_editorial
-                 << setw(10) << p.id_pedido
-                 << setw(10) << p.cod_libro
-                 << setw(15) << p.materia
-                 << setw(5) << p.unidades
-                 << setw(10) << p.estado << " |" << endl;
-        }
-
-        cout << "\n\nQImprenta" << endl;
-        cout << "----------------------------------------------------------" << endl;
-        cout << left << setw(6) << "Lib"
-             << setw(10) << "Id"
-             << setw(10) << "Codigo"
-             << setw(15) << "Materia"
-             << setw(5) << "U"
-             << setw(10) << "Estado     |" << endl;
-        cout << "----------------------------------------------------------" << endl;
-
-        if (q_imprenta.empty())
-        {
-            cout << "(Vacia)" << endl;
-        }
-
-        while (!q_imprenta.empty())
-        {
-            Pedido p = q_imprenta.front();
-            q_imprenta.pop();
-            cout << left << setw(6) << p.id_editorial
-                 << setw(10) << p.id_pedido
-                 << setw(10) << p.cod_libro
-                 << setw(15) << p.materia
-                 << setw(5) << p.unidades
-                 << setw(10) << p.estado << " |" << endl;
-        }
-
-        cout << "\n\nQListo" << endl;
-        cout << "----------------------------------------------------------" << endl;
-        cout << left << setw(6) << "Lib"
-             << setw(10) << "Id"
-             << setw(10) << "Codigo"
-             << setw(15) << "Materia"
-             << setw(5) << "U"
-             << setw(10) << "Estado     |" << endl;
-        cout << "----------------------------------------------------------" << endl;
-
-        if (q_listo.empty())
-        {
-            cout << "(Vacia)" << endl;
-        }
-
-        while (!q_listo.empty())
-        {
-            Pedido p = q_listo.front();
-            q_listo.pop();
-            cout << left << setw(6) << p.id_editorial
-                 << setw(10) << p.id_pedido
-                 << setw(10) << p.cod_libro
-                 << setw(15) << p.materia
-                 << setw(5) << p.unidades
-                 << setw(10) << p.estado << " |" << endl;
-        }
-
     }
-    cout << "\n\n\n" << endl;
+    if (!algunaCajaConPedidos) {
+        cout << "(Todas las cajas estan vacias)" << endl;
+    }
+    cout << "------------------------------------------------------------------" << endl;
+
+    cout << "\n<<<<<<<<<<<<<<<<<<<<<<<<< FIN >>>>>>>>>>>>>>>>>>>>>>>>\n" << endl;
 }
 
+//========================
+//        OPCIÓN 4
+//========================
+
+void Editorial::verContenidoCaja(int id_libreria)
+{
+    // --- LÓGICA PARA VER UNA CAJA ESPECÍFICA ---
+    // Aquí tienes que comprobar que el id_libreria es válido
+    // y luego llamar al método mostrar() de la pila correspondiente.
+    cout << "\n== Contenido de la Caja para Libreria " << id_libreria << " ==" << endl;
+    if (id_libreria >= 0 && id_libreria < LIBRERIAS) {
+        cajas[id_libreria].mostrar(); // Llama al método que acabamos de arreglar
+        cout << endl;
+    } else {
+        cout << "[ERROR] ID de libreria no valido." << endl;
+    }
+}

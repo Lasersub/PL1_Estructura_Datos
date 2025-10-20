@@ -40,7 +40,15 @@ struct Pedido {
     std::string estado;
 };
 
+// ===================================
+//              LIBRO
+// ===================================
 
+struct Libro {
+    std::string cod_libro;
+    std::string materia;
+    int stock;
+};
 
 // ===================================
 //          NODO, PILA Y COLA
@@ -89,13 +97,8 @@ public:
     Pedido desencolar(); // Devuelve un Pedido
     bool esVacia(); // Renombrado de 'es_vacia' para consistencia
     void mostrar();
+    void mostrarConFormatoDeTabla();
 };
-
-
-// Cola global
-extern std::queue<Pedido> cola_pedidos;
-
-
 
 // ===================================
 //     CLASE PRINCIPAL DEL SISTEMA
@@ -143,14 +146,5 @@ public:
 
 // Muestra el menú al usuario
 void mostrar_menu();
-
-// Genera pedidos aleatorios en la Opción 1
-void generar_pedidos(int n_pedidos);
-
-// Muestra el estado del sistema en la Opción 3
-void mostrar_estado_sistema(queue<Pedido> cola_pedidos);
-
-
-
 
 #endif // EDITORIAL_H

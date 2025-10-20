@@ -12,9 +12,8 @@ using namespace std;
  */
 int main()
 {
+    Editorial miEditorial; // 1. ¡Creamos el objeto! El constructor se ejecuta aquí.
     int opcion;
-    int n_pedidos;
-    int id_lib;
 
     do {
         mostrar_menu();
@@ -28,32 +27,29 @@ int main()
         }
 
         switch (opcion) {
-            case 1: // Generar N pedidos aleatorios
+            case 1:
+                int n_pedidos;
                 cout << "Introduzca el numero de pedidos a generar: ";
-                if (!(cin >> n_pedidos) || n_pedidos <= 0) {
-                    cout << "\n[ERROR] Numero de pedidos no valido.\n\n\n" << endl;
-                    cin.clear();
-                    cin.ignore(10000, '\n');
-                } else {
-                    cout << "\n\n\nGenerados " << n_pedidos << " en QIniciado\n" << endl;
-                    generar_pedidos(n_pedidos);
-                    cout << "\nPedidos en la cola: " << cola_pedidos.size() <<  "\n\n\n" << endl;
-                }
+                cin >> n_pedidos;
+                miEditorial.generarPedidos(n_pedidos); // 2. Llamamos al MÉTODO del objeto
                 break;
-            case 2: // Ejecutar un paso de simulación (una fase)
+            case 2:
+                miEditorial.ejecutarPasoSimulacion();
                 break;
-            case 3: // Mostrar el estado del sistema
-                    mostrar_estado_sistema(cola_pedidos);
+            case 3:
+                miEditorial.mostrarEstadoSistema(); // 3. Llamamos al MÉTODO del objeto
                 break;
-            case 4: // Ver el contenido de una caja de una librería
-                cout << "Introduzca el ID de la librería (1 a " << "NUM_LIBRERIAS" << "): ";
+            case 4:
+                int id_lib;
+                cout << "Introduzca el ID de la libreria (0 a " << LIBRERIAS - 1 << "): ";
+                cin >> id_lib;
+                miEditorial.verContenidoCaja(id_lib);
                 break;
-            case 0: // Salir del programa
-                cout << "\n\n\nSaliendo del simulador. SYBAU nigger!\n\n\n" << endl;
+            case 0:
+                cout << "\nSaliendo del simulador...\n";
                 break;
             default:
-                if (opcion != -1) // Si el error no vino del manejo de la entrada
-                    cout << "\n[ERROR] Opcion no valida. Intentelo de nuevo.\n\n\n" << endl;
+                cout << "\n[ERROR] Opcion no valida.\n";
                 break;
         }
     } while (opcion != 0);
