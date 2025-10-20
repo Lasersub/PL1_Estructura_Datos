@@ -31,7 +31,18 @@ int main()
                 int n_pedidos;
                 cout << "Introduzca el numero de pedidos a generar: ";
                 cin >> n_pedidos;
-                miEditorial.generarPedidos(n_pedidos); // 2. Llamamos al MÉTODO del objeto
+
+                if (n_pedidos > 0) {
+                    miEditorial.generarPedidos(n_pedidos);
+
+                    // AHORA LLAMAMOS A LA NUEVA FUNCIÓN, MÁS ESPECÍFICA
+                    miEditorial.mostrarPedidosGenerados();
+
+                } else {
+                    cout << "\n[ERROR] El numero de pedidos debe ser mayor que cero." << endl;
+                }
+                break;
+
                 break;
             case 2:
                 miEditorial.ejecutarPasoSimulacion();

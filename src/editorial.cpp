@@ -294,11 +294,19 @@ void Editorial::generarPedidos(int n) {
         p.estado = "Iniciado";
 
         // 6. Encolar el pedido en la primera cola del sistema.
-        colaIniciado.encolar(p);
+        // colaIniciado.encolar(p); DESCOMENTAR PARA FUNCIONAMIENTO NORMAL
+
+        cajas[p.id_editorial].apilar(p);
     }
 
     // (Opcional) Mensaje de confirmación al usuario.
     std::cout << n << " Pedidos nuevos generados y en la cola 'Iniciado'." << std::endl;
+}
+
+void Editorial::mostrarPedidosGenerados()
+{
+    cout << "\n== Pedidos Recien Generados (En Cola 'Iniciado') ==" << endl;
+    colaIniciado.mostrarConFormatoDeTabla();
 }
 
 //========================
@@ -379,14 +387,12 @@ void Editorial::mostrarEstadoSistema()
 
 void Editorial::verContenidoCaja(int id_libreria)
 {
-    // --- LÓGICA PARA VER UNA CAJA ESPECÍFICA ---
-    // Aquí tienes que comprobar que el id_libreria es válido
-    // y luego llamar al método mostrar() de la pila correspondiente.
     cout << "\n== Contenido de la Caja para Libreria " << id_libreria << " ==" << endl;
     if (id_libreria >= 0 && id_libreria < LIBRERIAS) {
-        cajas[id_libreria].mostrar(); // Llama al método que acabamos de arreglar
+        cajas[id_libreria].mostrar();
         cout << endl;
     } else {
         cout << "[ERROR] ID de libreria no valido." << endl;
     }
+
 }

@@ -136,6 +136,7 @@ public:
     void ejecutarPasoSimulacion();
     void mostrarEstadoSistema();
     void verContenidoCaja(int id_libreria);
+    void mostrarPedidosGenerados();
 };
 
 
