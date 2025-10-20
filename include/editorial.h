@@ -5,9 +5,31 @@
 #include <string>
 #include <queue>
 
+
+// ===================================
+//     CONSTANTES DE CONFIGURACIÓN
+// ===================================
+
+#define MAX_PEDIDOS_CAJA 5         // Número máximo de pedidos que admite una caja
+#define MAX_LIBROS_STOCK 50        // Stock inicial máximo para generar aleatoriamente
+#define NUM_TIPOS_LIBROS 5         // Número de títulos de libros diferentes
+#define MAX_UNIDADES_PEDIDO 10     // Unidades máximas que se pueden solicitar en un pedido
+#define NUM_LIBRERIAS 3            // Número de librerías diferentes
+
+#define ESTADO_INICIADO "Iniciado"
+#define ESTADO_ALMACEN "Almacén"
+#define ESTADO_IMPRENTA "Imprenta" // Códigos de estado del pedido
+#define ESTADO_LISTO "Listo"
+#define ESTADO_CAJA "Caja"
+
+
 using namespace std;
 
-//Struct pedido que define la clase central que sera el pedido
+
+// ===================================
+//              PEDIDO
+// ===================================
+
 struct Pedido {
     int id_editorial;
     std::string id_pedido;
@@ -17,6 +39,10 @@ struct Pedido {
     std::string estado;
 };
 
+
+// ===================================
+//          NODO, PILA Y COLA
+// ===================================
 
 // Un solo Nodo que almacena un Pedido. Asi no tenemos que hacer NodoPila y NodoCola ya que seria redundancia
 class Nodo
@@ -68,12 +94,17 @@ public:
 extern std::queue<Pedido> cola_pedidos;
 
 
-// --- Funciones auxiliares ---
+// ===================================
+//        FUNCIONES AUXILIARES
+// ===================================
 
+// Muestra el menú al usuario
 void mostrar_menu();
 
+// Genera pedidos aleatorios en la Opción 1
 void generar_pedidos(int n_pedidos);
 
+// Muestra el estado del sistema en la Opción 3
 void mostrar_estado_sistema(queue<Pedido> cola_pedidos);
 
 
