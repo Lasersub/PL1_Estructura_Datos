@@ -27,43 +27,6 @@ using namespace std;
 
 
 
-// --- CLASE PRINCIPAL DEL SISTEMA ---
-
-class Editorial {
-private:
-    // Colas para cada fase del proceso
-    Cola colaIniciado;
-    Cola colaAlmacen;
-    Cola colaImprenta;
-    Cola colaListo;
-
-    // Un array de Pilas, donde cada pila es una caja para una librería
-    Pila cajas[LIBRERIAS];
-
-    // Almacén de libros (nuestro catálogo)
-    Libro catalogo[MAX_TITULOS]; // MAX_TITULOS lo definimos en 12
-
-    // Variable para generar IDs de pedido únicos
-    int ultimoIdPedido;
-
-    // --- Métodos privados (ayudantes internos) ---
-    void inicializarCatalogo();
-    int buscarLibro(std::string cod_libro);
-    void procesarCaja(int id_libreria);
-
-public:
-    // --- Métodos públicos (la interfaz del programa) ---
-    Editorial(); // Constructor: se ejecuta al crear el objeto
-    ~Editorial(); // Destructor: se ejecuta al destruir el objeto
-
-    // Funciones que se corresponden con el menú de opciones
-    void generarPedidos(int n);
-    void ejecutarPasoSimulacion();
-    void mostrarEstadoSistema();
-    void verContenidoCaja(int id_libreria);
-};
-
-
 // ===================================
 //              PEDIDO
 // ===================================
@@ -76,6 +39,7 @@ struct Pedido {
     int unidades;
     std::string estado;
 };
+
 
 
 // ===================================
@@ -130,6 +94,47 @@ public:
 
 // Cola global
 extern std::queue<Pedido> cola_pedidos;
+
+
+
+// ===================================
+//     CLASE PRINCIPAL DEL SISTEMA
+// ===================================
+
+class Editorial {
+private:
+    // Colas para cada fase del proceso
+    Cola colaIniciado;
+    Cola colaAlmacen;
+    Cola colaImprenta;
+    Cola colaListo;
+
+    // Un array de Pilas, donde cada pila es una caja para una librería
+    Pila cajas[LIBRERIAS];
+
+    // Almacén de libros (nuestro catálogo)
+    Libro catalogo[MAX_TITULOS]; // MAX_TITULOS lo definimos en 12
+
+    // Variable para generar IDs de pedido únicos
+    int ultimoIdPedido;
+
+    // --- Métodos privados (ayudantes internos) ---
+    void inicializarCatalogo();
+    int buscarLibro(std::string cod_libro);
+    void procesarCaja(int id_libreria);
+
+public:
+    // --- Métodos públicos (la interfaz del programa) ---
+    Editorial(); // Constructor: se ejecuta al crear el objeto
+    ~Editorial(); // Destructor: se ejecuta al destruir el objeto
+
+    // Funciones que se corresponden con el menú de opciones
+    void generarPedidos(int n);
+    void ejecutarPasoSimulacion();
+    void mostrarEstadoSistema();
+    void verContenidoCaja(int id_libreria);
+};
+
 
 
 // ===================================
