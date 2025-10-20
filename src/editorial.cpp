@@ -183,60 +183,62 @@ void mostrar_menu()
 // Cola global para guardar los pedidos
 std::queue<Pedido> cola_pedidos;
 
-// Genera un código aleatorio de 6 caracteres alfanuméricos
-string generarCodigo()
-{
-    string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    string code = "";
-    for (int i = 0; i < 6; i++)
-        code += chars[rand() % chars.size()];
-    return code;
+// Array del catalogo de libros disponibles
+void Editorial::inicializarCatalogo() {
+
+    // MATEMÁTICAS (2 libros)
+    catalogo[0] = {"101A23", "Matematicas", 120};
+    catalogo[1] = {"102B24", "Matematicas", 90};
+
+    // FÍSICA (1 libro)
+    catalogo[2] = {"211C15", "Fisica", 80};
+
+    // TECNOLOGÍA (2 libros)
+    catalogo[3] = {"341D99", "Tecnologia", 75};
+    catalogo[4] = {"342E01", "Tecnologia", 100};
+
+    // MÚSICA (1 libro)
+    catalogo[5] = {"401F45", "Musica", 60};
+
+    // HISTORIA (3 libros)
+    catalogo[6] = {"511G76", "Historia", 150};
+    catalogo[7] = {"512H88", "Historia", 110};
+    catalogo[8] = {"513I91", "Historia", 95};
+
+    // LENGUA (3 libros)
+    catalogo[9] = {"601J10", "Lengua", 200};
+    catalogo[10] = {"602K11", "Lengua", 180};
+    catalogo[11] = {"603L12", "Lengua", 160};
 }
 
-// Genera una materia aleatoria
-string generarMateria()
-{
-    string materias[] = {"Tecnologia", "Historia", "Musica", "Arte", "Matematicas", "Ciencias"};
-    return materias[rand() % 6];
-}
 
-
-// Genera y muestra n pedidos aleatorios
-void generar_pedidos(int n_pedidos)
-{
-    srand(time(nullptr));
-
-    cout << "QIniciado:" << endl;
-    cout << "----------------------------------------------------------" << endl;
-    cout << left << setw(6) << "Lib"
-         << setw(10) << "Id"
-         << setw(10) << "Codigo"
-         << setw(15) << "Materia"
-         << setw(5) << "U"
-         << setw(10) << "Estado     |" << endl;
-    cout << "----------------------------------------------------------" << endl;
-
-    for (int i = 0; i < n_pedidos; i++)
-    {
+void Editorial::generarPedidos(int n) {
+    for (int i = 0; i < n; i++) {
         Pedido p;
-        p.id_editorial = rand() % 5 + 1;
-        p.id_pedido = "P" + to_string(20000 + rand() % 99999);
-        p.cod_libro = generarCodigo();
-        p.materia = generarMateria();
-        p.unidades = rand() % 20 + 1;
+
+        // 1. ID de librería: aleatorio entre 0 y LIBRERIAS-1.
+        p.id_editorial = rand() % LIBRERIAS;
+
+        // 2. ID de pedido: Único y secuencial, no aleatorio.
+        p.id_pedido = "P" + std::to_string(ultimoIdPedido++);
+
+        // 3. Libro: Se elige uno aleatorio del catálogo existente.
+        int libro_idx = rand() % MAX_TITULOS; // MAX_TITULOS es 12 en nuestro caso
+        p.cod_libro = catalogo[libro_idx].cod_libro;
+        p.materia   = catalogo[libro_idx].materia;
+
+        // 4. Unidades: Un número aleatorio.
+        p.unidades = rand() % 30 + 5; // Por ejemplo, entre 5 y 34 libros
+
+        // 5. Estado: Siempre "Iniciado" al crearse.
         p.estado = "Iniciado";
 
-        // Guardar en la cola
-        cola_pedidos.push(p);
-
-        // Mostrar en pantalla
-        cout << left << setw(6) << p.id_editorial
-             << setw(10) << p.id_pedido
-             << setw(10) << p.cod_libro
-             << setw(15) << p.materia
-             << setw(5) << p.unidades
-             << setw(10) << p.estado << " |" << endl;
+        // 6. Encolar el pedido en la primera cola del sistema.
+        colaIniciado.encolar(p);
     }
+
+    // (Opcional) Mensaje de confirmación al usuario.
+    std::cout << n << " Pedidos nuevos generados y en la cola 'Iniciado'." << std::endl;
 }
 
 //========================
