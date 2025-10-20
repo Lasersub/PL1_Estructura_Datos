@@ -211,6 +211,23 @@ void Editorial::inicializarCatalogo() {
     catalogo[11] = {"603L12", "Lengua", 160};
 }
 
+int Editorial::buscarLibro(std::string cod_libro) {
+    for (int i = 0; i < MAX_TITULOS; i++) {
+        if (catalogo[i].cod_libro == cod_libro) {
+            return i; // Devuelve el índice si lo encuentra
+        }
+    }
+    return -1; // Devuelve -1 si no lo encuentra
+}
+
+// Vacía una caja cuando se llena (simula el envío)
+void Editorial::procesarCaja(int id_libreria) {
+    std::cout << "\n==> ¡Caja para libreria " << id_libreria << " llena! Se envia y se vacia. <==" << std::endl;
+    while (!cajas[id_libreria].esVacia()) {
+        cajas[id_libreria].desapilar();
+    }
+}
+
 
 void Editorial::generarPedidos(int n) {
     for (int i = 0; i < n; i++) {

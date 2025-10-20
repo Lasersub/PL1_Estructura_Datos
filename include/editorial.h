@@ -10,11 +10,11 @@
 //     CONSTANTES DE CONFIGURACIÓN
 // ===================================
 
-#define MAX_PEDIDOS_CAJA 5         // Número máximo de pedidos que admite una caja
-#define MAX_LIBROS_STOCK 50        // Stock inicial máximo para generar aleatoriamente
-#define NUM_TIPOS_LIBROS 5         // Número de títulos de libros diferentes
-#define MAX_UNIDADES_PEDIDO 10     // Unidades máximas que se pueden solicitar en un pedido
-#define NUM_LIBRERIAS 3            // Número de librerías diferentes
+#define MAX_TITULOS 12          // Nº de títulos diferentes en el catálogo (usamos 12 como decidimos)
+#define N_PEDIDOS_PASO 12       // Nº de pedidos procesados por fase en cada paso de simulación
+#define TAM_LOTE 10             // Incremento de stock desde la imprenta
+#define LIBRERIAS 6             // Nº de librerías que realizan pedidos
+#define CAP_CAJA 5              // Nº de pedidos por caja antes de enviar
 
 #define ESTADO_INICIADO "Iniciado"
 #define ESTADO_ALMACEN "Almacén"
@@ -24,6 +24,44 @@
 
 
 using namespace std;
+
+
+
+// --- CLASE PRINCIPAL DEL SISTEMA ---
+
+class Editorial {
+private:
+    // Colas para cada fase del proceso
+    Cola colaIniciado;
+    Cola colaAlmacen;
+    Cola colaImprenta;
+    Cola colaListo;
+
+    // Un array de Pilas, donde cada pila es una caja para una librería
+    Pila cajas[LIBRERIAS];
+
+    // Almacén de libros (nuestro catálogo)
+    Libro catalogo[MAX_TITULOS]; // MAX_TITULOS lo definimos en 12
+
+    // Variable para generar IDs de pedido únicos
+    int ultimoIdPedido;
+
+    // --- Métodos privados (ayudantes internos) ---
+    void inicializarCatalogo();
+    int buscarLibro(std::string cod_libro);
+    void procesarCaja(int id_libreria);
+
+public:
+    // --- Métodos públicos (la interfaz del programa) ---
+    Editorial(); // Constructor: se ejecuta al crear el objeto
+    ~Editorial(); // Destructor: se ejecuta al destruir el objeto
+
+    // Funciones que se corresponden con el menú de opciones
+    void generarPedidos(int n);
+    void ejecutarPasoSimulacion();
+    void mostrarEstadoSistema();
+    void verContenidoCaja(int id_libreria);
+};
 
 
 // ===================================
