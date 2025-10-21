@@ -82,6 +82,7 @@ public:
     void apilar(Pedido p); // Recibe un Pedido
     Pedido desapilar(); // Devuelve un Pedido
     void mostrar();
+    int getNumeroElementos();
 };
 
 
@@ -124,6 +125,8 @@ private:
     void inicializarCatalogo();
     int buscarLibro(std::string cod_libro);
     void procesarCaja(int id_libreria);
+
+    std::string generarCodigoLibroAleatorio(); // Funcion auxiliar para la generacion de stock
 
 public:
     Editorial();

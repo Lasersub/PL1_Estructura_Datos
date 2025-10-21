@@ -84,6 +84,17 @@ void Pila::mostrar()
     }
 }
 
+int Pila::getNumeroElementos()
+{
+    int contador = 0;
+    Nodo *aux = cima; // Empezamos desde la cima
+    while (aux != nullptr) {
+        contador++; // Incrementamos por cada nodo que visitamos
+        aux = aux->siguiente;
+    }
+    return contador;
+}
+
 //========================
 //         COLA
 //========================
@@ -231,32 +242,54 @@ Editorial::~Editorial() {
 
 }
 
+std::string Editorial::generarCodigoLibroAleatorio() {
+    std::string codigo = "";
+
+    // 1. Tres primeros dígitos (ej. "341")
+    for (int i = 0; i < 3; i++) {
+        codigo += std::to_string(rand() % 10);
+    }
+
+    // 2. Una letra mayúscula aleatoria (A-Z) (ej. "D")
+    // (El código ASCII de 'A' es 65. Hay 26 letras)
+    codigo += (char)(rand() % 26 + 65);
+
+    // 3. Dos últimos dígitos (ej. "99")
+    for (int i = 0; i < 2; i++) {
+        codigo += std::to_string(rand() % 10);
+    }
+
+    return codigo;
+}
+
 // Array del catalogo de libros disponibles
 void Editorial::inicializarCatalogo() {
 
-    // MATEMÁTICAS (2 libros)
-    catalogo[0] = {"101A23", "Matematicas", 120};
-    catalogo[1] = {"102B24", "Matematicas", 90};
+    // Mantenemos la lista de materias según la especificación original
+    std::string materias[MAX_TITULOS] = {
+        "Matematicas", "Matematicas",
+        "Fisica",
+        "Tecnologia", "Tecnologia",
+        "Musica",
+        "Historia", "Historia", "Historia",
+        "Lengua", "Lengua", "Lengua"
+    };
 
-    // FÍSICA (1 libro)
-    catalogo[2] = {"211C15", "Fisica", 80};
+    cout << ">> Generando catalogo aleatorio..." << endl;
 
-    // TECNOLOGÍA (2 libros)
-    catalogo[3] = {"341D99", "Tecnologia", 75};
-    catalogo[4] = {"342E01", "Tecnologia", 100};
+    for (int i = 0; i < MAX_TITULOS; i++) {
 
-    // MÚSICA (1 libro)
-    catalogo[5] = {"401F45", "Musica", 60};
+        // 1. Asignar la materia correspondiente
+        catalogo[i].materia = materias[i];
 
-    // HISTORIA (3 libros)
-    catalogo[6] = {"511G76", "Historia", 150};
-    catalogo[7] = {"512H88", "Historia", 110};
-    catalogo[8] = {"513I91", "Historia", 95};
+        // 2. Generar un código de libro aleatorio
+        catalogo[i].cod_libro = generarCodigoLibroAleatorio();
 
-    // LENGUA (3 libros)
-    catalogo[9] = {"601J10", "Lengua", 200};
-    catalogo[10] = {"602K11", "Lengua", 180};
-    catalogo[11] = {"603L12", "Lengua", 160};
+        // 3. Generar un stock inicial aleatorio (ej. entre 50 y 200 unidades)
+        catalogo[i].stock = rand() % 151 + 50;
+    }
+
+    cout << ">> Catalogo aleatorio generado con exito." << endl;
 }
 
 int Editorial::buscarLibro(std::string cod_libro) {
@@ -299,9 +332,9 @@ void Editorial::generarPedidos(int n) {
         p.estado = "Iniciado";
 
         // 6. Encolar el pedido en la primera cola del sistema.
-        // colaIniciado.encolar(p); DESCOMENTAR PARA FUNCIONAMIENTO NORMAL
+        colaIniciado.encolar(p);
 
-        cajas[p.id_editorial].apilar(p);
+        // cajas[p.id_editorial].apilar(p; COMENTARIO PARA PROBAR FUNCIONAMIENTO CAJAS
     }
 
     // (Opcional) Mensaje de confirmación al usuario.
@@ -318,12 +351,100 @@ void Editorial::mostrarPedidosGenerados()
 //        OPCIÓN 2
 //========================
 
+void Editorial::ejecutarPasoSimulacion()
 
+{
+
+    // --- LÓGICA PRINCIPAL DE LA SIMULACIÓN ---
+
+    cout << "\n[AVISO] La funcion 'ejecutarPasoSimulacion' aun no ha sido implementada.\n" << endl;
+
+}
+
+
+
+
+
+
+/*
 void Editorial::ejecutarPasoSimulacion()
 {
-    // --- LÓGICA PRINCIPAL DE LA SIMULACIÓN ---
-    cout << "\n[AVISO] La funcion 'ejecutarPasoSimulacion' aun no ha sido implementada.\n" << endl;
+    cout << "\n... EJECUTANDO PASO DE SIMULACION ...\n" << endl;
+    int pedidosProcesados = 0;
+
+    // --- FASE 1: De Listo a Caja ---
+    cout << "FASE 1: Procesando pedidos Listos para Caja..." << endl;
+    for (int i = 0; i < N_PEDIDOS_PASO && !colaListo.esVacia(); i++) {
+        Pedido p = colaListo.desencolar();
+        p.estado = ESTADO_CAJA;
+
+        int id_destino = p.id_editorial;
+        cajas[id_destino].apilar(p);
+        cout << "  > Pedido " << p.id_pedido << " movido a la caja de la libreria " << id_destino << "." << endl;
+
+        // Comprobamos si la caja se ha llenado
+        if (cajas[id_destino].getNumeroElementos() == CAP_CAJA) {
+            procesarCaja(id_destino); // Si está llena, se envía (vacía la pila)
+        }
+        pedidosProcesados++;
+    }
+
+    // --- FASE 2: De Imprenta a Listo ---
+    cout << "FASE 2: Procesando pedidos de Imprenta..." << endl;
+    for (int i = 0; i < N_PEDIDOS_PASO && !colaImprenta.esVacia(); i++) {
+        Pedido p = colaImprenta.desencolar();
+        p.estado = ESTADO_LISTO;
+
+        // Aumentamos el stock del libro correspondiente
+        int libro_idx = buscarLibro(p.cod_libro);
+        if (libro_idx != -1) {
+            catalogo[libro_idx].stock += TAM_LOTE;
+            cout << "  > Lote para el libro " << p.cod_libro << " impreso. Stock actualizado a " << catalogo[libro_idx].stock << "." << endl;
+        }
+
+        colaListo.encolar(p);
+        pedidosProcesados++;
+    }
+
+    // --- FASE 3: De Almacén a Listo o Imprenta ---
+    cout << "FASE 3: Procesando pedidos de Almacen..." << endl;
+    for (int i = 0; i < N_PEDIDOS_PASO && !colaAlmacen.esVacia(); i++) {
+        Pedido p = colaAlmacen.desencolar();
+        int libro_idx = buscarLibro(p.cod_libro);
+        int stockDisponible = (libro_idx == -1) ? 0 : catalogo[libro_idx].stock;
+
+        if (stockDisponible >= p.unidades) {
+            // Hay stock suficiente
+            catalogo[libro_idx].stock -= p.unidades;
+            p.estado = ESTADO_LISTO;
+            colaListo.encolar(p);
+            cout << "  > Pedido " << p.id_pedido << " tiene stock (" << p.unidades << " uds). Movido a Listo." << endl;
+        } else {
+            // No hay stock, va a imprenta
+            p.estado = ESTADO_IMPRENTA;
+            colaImprenta.encolar(p);
+            cout << "  > Pedido " << p.id_pedido << " sin stock (necesita " << p.unidades << ", hay " << stockDisponible << "). Movido a Imprenta." << endl;
+        }
+        pedidosProcesados++;
+    }
+
+    // --- FASE 4: De Iniciado a Almacén ---
+    cout << "FASE 4: Procesando pedidos Iniciados..." << endl;
+    for (int i = 0; i < N_PEDIDOS_PASO && !colaIniciado.esVacia(); i++) {
+        Pedido p = colaIniciado.desencolar();
+        p.estado = ESTADO_ALMACEN;
+        colaAlmacen.encolar(p);
+        pedidosProcesados++;
+    }
+
+    if (pedidosProcesados == 0) {
+        cout << "No hay pedidos para procesar en ninguna fase." << endl;
+    } else {
+        cout << "\n... PASO DE SIMULACION COMPLETADO (" << pedidosProcesados << " pedidos movidos) ...\n" << endl;
+    }
 }
+*/
+
 
 
 

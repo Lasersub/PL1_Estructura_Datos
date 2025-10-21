@@ -41,8 +41,6 @@ int main()
                     cout << "\n[ERROR] El numero de pedidos debe ser mayor que cero." << endl;
                 }
                 break;
-
-                break;
             case 2:
                 miEditorial.ejecutarPasoSimulacion();
                 break;
