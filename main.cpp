@@ -12,7 +12,7 @@ using namespace std;
  */
 int main()
 {
-    Editorial miEditorial; // 1. ¡Creamos el objeto! El constructor se ejecuta aquí.
+    Editorial miEditorial;
     int opcion;
 
     do {
@@ -35,7 +35,6 @@ int main()
                 if (n_pedidos > 0) {
                     miEditorial.generarPedidos(n_pedidos);
 
-                    // AHORA LLAMAMOS A LA NUEVA FUNCIÓN, MÁS ESPECÍFICA
                     miEditorial.mostrarPedidosGenerados();
 
                 } else {
