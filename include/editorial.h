@@ -10,7 +10,7 @@
 //     CONSTANTES DE CONFIGURACIÓN
 // ===================================
 
-#define MAX_TITULOS 12          // Nº de títulos diferentes en el catálogo (usamos 12 como decidimos)
+#define MAX_TITULOS 12          // Nº de títulos diferentes en el catálogo
 #define N_PEDIDOS_PASO 12       // Nº de pedidos procesados por fase en cada paso de simulación
 #define TAM_LOTE 10             // Incremento de stock desde la imprenta
 #define LIBRERIAS 6             // Nº de librerías que realizan pedidos
@@ -74,35 +74,35 @@ public:
 class Pila
 {
 private:
-    Nodo *cima; // Usamos nuestro Nodo genérico
+    Nodo *cima;
 public:
     Pila();
     ~Pila();
     bool esVacia();
     void apilar(Pedido p); // Recibe un Pedido
     Pedido desapilar(); // Devuelve un Pedido
-    void mostrar(); // Modificado para mostrar pedidos
+    void mostrar();
 };
 
 
 class Cola
 {
 private:
-    Nodo *primero; // Usamos nuestro Nodo genérico
+    Nodo *primero;
     Nodo *ultimo;
 public:
     Cola();
     ~Cola();
     void encolar(Pedido p); // Recibe un Pedido
     Pedido desencolar(); // Devuelve un Pedido
-    bool esVacia(); // Renombrado de 'es_vacia' para consistencia
+    bool esVacia();
     void mostrar();
     void mostrarConFormatoDeTabla();
 };
 
-// ===================================
-//     CLASE PRINCIPAL DEL SISTEMA
-// ===================================
+// ======================================
+//     CLASE EDITORIAL, CLASE PRINCIPAL
+// ======================================
 
 class Editorial {
 private:
@@ -116,20 +116,18 @@ private:
     Pila cajas[LIBRERIAS];
 
     // Almacén de libros (nuestro catálogo)
-    Libro catalogo[MAX_TITULOS]; // MAX_TITULOS lo definimos en 12
+    Libro catalogo[MAX_TITULOS];
 
     // Variable para generar IDs de pedido únicos
     int ultimoIdPedido;
 
-    // --- Métodos privados (ayudantes internos) ---
     void inicializarCatalogo();
     int buscarLibro(std::string cod_libro);
     void procesarCaja(int id_libreria);
 
 public:
-    // --- Métodos públicos (la interfaz del programa) ---
-    Editorial(); // Constructor: se ejecuta al crear el objeto
-    ~Editorial(); // Destructor: se ejecuta al destruir el objeto
+    Editorial();
+    ~Editorial();
 
     // Funciones que se corresponden con el menú de opciones
     void generarPedidos(int n);
