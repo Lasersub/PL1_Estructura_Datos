@@ -58,24 +58,29 @@ Pedido Pila::desapilar()
 
 void Pila::mostrar()
 {
-    if (esVacia()) {
-        cout << "(Pila vacia)";
-        return;
+    // 1. Comprobar si la pila está vacía
+    if (esVacia())
+    {
+        cout << "(Vacia)" << endl;
     }
+    else
+    {
+        // 2. Recorrer la pila desde la cima (top) e imprimir cada pedido
+        Nodo *aux = cima;
+        while (aux)
+        {
+            Pedido p = aux->dato;
+            // Imprimir la fila con el formato de la tabla
+            cout << left << setw(6) << p.id_editorial
+                 << setw(10) << p.id_pedido
+                 << setw(10) << p.cod_libro
+                 << setw(15) << p.materia
+                 << setw(5) << p.unidades
+                 << setw(10) << p.estado << "|" << endl;
 
-    Nodo *aux = cima;
-    Pila temporal; // Usamos una pila temporal para imprimir en el orden correcto
-
-    // Pasamos todos los elementos a una pila temporal para invertir el orden
-    while (aux) {
-        temporal.apilar(aux->dato);
-        aux = aux->siguiente;
-    }
-
-    // Ahora imprimimos desde la pila temporal para verlos desde el fondo a la cima
-    cout << "Pedidos en la caja: ";
-    while(!temporal.esVacia()){
-        cout << temporal.desapilar().id_pedido << " ";
+            // Avanzar al siguiente nodo (más abajo en la pila)
+            aux = aux->siguiente;
+        }
     }
 }
 
@@ -387,12 +392,28 @@ void Editorial::mostrarEstadoSistema()
 
 void Editorial::verContenidoCaja(int id_libreria)
 {
-    cout << "\n== Contenido de la Caja para Libreria " << id_libreria << " ==" << endl;
-    if (id_libreria >= 0 && id_libreria < LIBRERIAS) {
-        cajas[id_libreria].mostrar();
-        cout << endl;
-    } else {
-        cout << "[ERROR] ID de libreria no valido." << endl;
+    // 1. Comprobar que el ID es válido
+    if (id_libreria < 0 || id_libreria >= LIBRERIAS) {
+        cout << "\n[ERROR] ID de libreria no valido (debe ser entre 0 y " << LIBRERIAS - 1 << ")." << endl;
+        return;
     }
 
+    // 2. Imprimir el título, tal como en la imagen
+    cout << "\n== Caja libreria " << id_libreria << " (top -> bottom) ==" << endl;
+
+    // 3. Imprimir la cabecera de la tabla (idéntica a la de las colas)
+    cout << "------------------------------------------------------------------" << endl;
+    cout << left << setw(6) << "Lib"
+         << setw(10) << "Id"
+         << setw(10) << "Codigo"
+         << setw(15) << "Materia"
+         << setw(5) << "U"
+         << setw(10) << "Estado" << "|" << endl;
+    cout << "------------------------------------------------------------------" << endl;
+
+    // 4. Llamar al método de la Pila para que imprima las filas del contenido
+    cajas[id_libreria].mostrar();
+
+    // 5. Imprimir el pie de la tabla
+    cout << "------------------------------------------------------------------" << endl;
 }
