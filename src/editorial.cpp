@@ -322,8 +322,6 @@ void Editorial::mostrarPedidosGenerados()
 void Editorial::ejecutarPasoSimulacion()
 {
     // --- LÓGICA PRINCIPAL DE LA SIMULACIÓN ---
-    // Esta es la función más importante que tienes que desarrollar.
-    // Aquí moverás los pedidos de una cola a otra (de Iniciado a Almacén, etc.)
     cout << "\n[AVISO] La funcion 'ejecutarPasoSimulacion' aun no ha sido implementada.\n" << endl;
 }
 
@@ -362,7 +360,7 @@ void Editorial::mostrarEstadoSistema()
     for (int i = 0; i < MAX_TITULOS; i++) {
         cout << left << setw(10) << catalogo[i].cod_libro
              << setw(15) << catalogo[i].materia
-             << catalogo[i].stock << endl; // Asumiendo que tu struct Libro tiene 'stock'
+             << catalogo[i].stock << endl;
     }
     cout << "------------------------------------\n" << endl;
 
@@ -373,7 +371,7 @@ void Editorial::mostrarEstadoSistema()
     for (int i = 0; i < LIBRERIAS; i++) {
         if (!cajas[i].esVacia()) { // 'cajas' es el array de Pilas de la clase Editorial
             cout << "Libreria " << i << ": ";
-            cajas[i].mostrar(); // Usamos el método mostrar() de Pila, que deberás ajustar
+            cajas[i].mostrar(); // Usamos el método mostrar() de Pila
             cout << endl;
             algunaCajaConPedidos = true;
         }
@@ -414,6 +412,5 @@ void Editorial::verContenidoCaja(int id_libreria)
     // 4. Llamar al método de la Pila para que imprima las filas del contenido
     cajas[id_libreria].mostrar();
 
-    // 5. Imprimir el pie de la tabla
     cout << "------------------------------------------------------------------" << endl;
 }
