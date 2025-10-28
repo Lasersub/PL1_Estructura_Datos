@@ -352,22 +352,6 @@ void Editorial::mostrarPedidosGenerados()
 //========================
 
 void Editorial::ejecutarPasoSimulacion()
-
-{
-
-    // --- LÓGICA PRINCIPAL DE LA SIMULACIÓN ---
-
-    cout << "\n[AVISO] La funcion 'ejecutarPasoSimulacion' aun no ha sido implementada.\n" << endl;
-
-}
-
-
-
-
-
-
-/*
-void Editorial::ejecutarPasoSimulacion()
 {
     cout << "\n... EJECUTANDO PASO DE SIMULACION ...\n" << endl;
     int pedidosProcesados = 0;
@@ -443,8 +427,6 @@ void Editorial::ejecutarPasoSimulacion()
         cout << "\n... PASO DE SIMULACION COMPLETADO (" << pedidosProcesados << " pedidos movidos) ...\n" << endl;
     }
 }
-*/
-
 
 
 
