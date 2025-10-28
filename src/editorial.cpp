@@ -179,14 +179,14 @@ void Cola::mostrar()
 void Cola::mostrarConFormatoDeTabla()
 {
     // 1. Imprimir la cabecera de la tabla
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
     cout << left << setw(6) << "Lib"
          << setw(10) << "Id"
          << setw(10) << "Codigo"
          << setw(15) << "Materia"
          << setw(5) << "U"
          << setw(10) << "Estado" << "|" << endl;
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
 
     // 2. Comprobar si la cola está vacía
     if (esVacia())
@@ -209,7 +209,7 @@ void Cola::mostrarConFormatoDeTabla()
             aux = aux->siguiente;
         }
     }
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
 }
 
 // Muestra el menú principal al usuario
@@ -469,7 +469,7 @@ void Editorial::mostrarEstadoSistema()
 
     // --- 3. MOSTRAR ESTADO DE LAS CAJAS ---
     cout << "== CAJAS (pilas por libreria) ==" << endl;
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
     bool algunaCajaConPedidos = false;
     for (int i = 0; i < LIBRERIAS; i++) {
         if (!cajas[i].esVacia()) { // 'cajas' es el array de Pilas de la clase Editorial
@@ -482,7 +482,7 @@ void Editorial::mostrarEstadoSistema()
     if (!algunaCajaConPedidos) {
         cout << "(Todas las cajas estan vacias)" << endl;
     }
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
 
     cout << "\n<<<<<<<<<<<<<<<<<<<<<<<<< FIN >>>>>>>>>>>>>>>>>>>>>>>>\n" << endl;
 }
@@ -503,17 +503,17 @@ void Editorial::verContenidoCaja(int id_libreria)
     cout << "\n== Caja libreria " << id_libreria << " (top -> bottom) ==" << endl;
 
     // 3. Imprimir la cabecera de la tabla (idéntica a la de las colas)
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
     cout << left << setw(6) << "Lib"
          << setw(10) << "Id"
          << setw(10) << "Codigo"
          << setw(15) << "Materia"
          << setw(5) << "U"
          << setw(10) << "Estado" << "|" << endl;
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
 
     // 4. Llamar al método de la Pila para que imprima las filas del contenido
     cajas[id_libreria].mostrar();
 
-    cout << "------------------------------------------------------------------" << endl;
+    cout << "---------------------------------------------------------" << endl;
 }
