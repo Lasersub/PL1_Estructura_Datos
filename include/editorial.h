@@ -17,7 +17,7 @@
 #define CAP_CAJA 5              // Nº de pedidos por caja antes de enviar
 
 #define ESTADO_INICIADO "Iniciado"
-#define ESTADO_ALMACEN "Almacén"
+#define ESTADO_ALMACEN "Almacen"
 #define ESTADO_IMPRENTA "Imprenta" // Códigos de estado del pedido
 #define ESTADO_LISTO "Listo"
 #define ESTADO_CAJA "Caja"
