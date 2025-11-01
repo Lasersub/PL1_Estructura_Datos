@@ -232,9 +232,9 @@ void mostrar_menu()
 //========================
 
 Editorial::Editorial() {
-    srand(time(NULL)); // Inicializamos la semilla para números aleatorios una sola vez
-    ultimoIdPedido = 21508; // Ponemos un valor inicial para los IDs de pedido
-    inicializarCatalogo(); // Llamamos al método privado para llenar el stock
+    srand(time(NULL)); // Inicializamos la semilla para números aleatorios una sola vez y asi evitar repetición
+    ultimoIdPedido = 21508; // valor inicial para los IDs de pedido
+    inicializarCatalogo(); // método privado para llenar el stock
     std::cout << ">> Sistema de la editorial listo para operar. <<" << std::endl;
 }
 
@@ -245,16 +245,15 @@ Editorial::~Editorial() {
 std::string Editorial::generarCodigoLibroAleatorio() {
     std::string codigo = "";
 
-    // 1. Tres primeros dígitos (ej. "341")
+    // 1. Tres primeros dígitos numericos
     for (int i = 0; i < 3; i++) {
         codigo += std::to_string(rand() % 10);
     }
 
-    // 2. Una letra mayúscula aleatoria (A-Z) (ej. "D")
-    // (El código ASCII de 'A' es 65. Hay 26 letras)
+    // 2. Una letra mayúscula aleatoria (A-Z),(El código ASCII de 'A' es 65. Hay 26 letras)
     codigo += (char)(rand() % 26 + 65);
 
-    // 3. Dos últimos dígitos (ej. "99")
+    // 3. Dos últimos dígitos numericos
     for (int i = 0; i < 2; i++) {
         codigo += std::to_string(rand() % 10);
     }
@@ -265,7 +264,7 @@ std::string Editorial::generarCodigoLibroAleatorio() {
 // Array del catalogo de libros disponibles
 void Editorial::inicializarCatalogo() {
 
-    // Mantenemos la lista de materias según la especificación original
+    // Mantenemos la lista de materias originales
     std::string materias[MAX_TITULOS] = {
         "Matematicas", "Matematicas",
         "Fisica",
@@ -285,7 +284,7 @@ void Editorial::inicializarCatalogo() {
         // 2. Generar un código de libro aleatorio
         catalogo[i].cod_libro = generarCodigoLibroAleatorio();
 
-        // 3. Generar un stock inicial aleatorio (ej. entre 50 y 200 unidades)
+        // 3. Generar un stock inicial aleatorio
         catalogo[i].stock = rand() % 151 + 50;
     }
 
@@ -321,7 +320,7 @@ void Editorial::generarPedidos(int n) {
         p.id_pedido = "P" + std::to_string(ultimoIdPedido++);
 
         // 3. Libro: Se elige uno aleatorio del catálogo existente.
-        int libro_idx = rand() % MAX_TITULOS; // MAX_TITULOS es 12 en nuestro caso
+        int libro_idx = rand() % MAX_TITULOS;
         p.cod_libro = catalogo[libro_idx].cod_libro;
         p.materia   = catalogo[libro_idx].materia;
 
@@ -333,11 +332,9 @@ void Editorial::generarPedidos(int n) {
 
         // 6. Encolar el pedido en la primera cola del sistema.
         colaIniciado.encolar(p);
-
-        // cajas[p.id_editorial].apilar(p; COMENTARIO PARA PROBAR FUNCIONAMIENTO CAJAS
     }
 
-    // (Opcional) Mensaje de confirmación al usuario.
+    // Mensaje confirmacion
     std::cout << n << " Pedidos nuevos generados y en la cola 'Iniciado'." << std::endl;
 }
 
@@ -395,7 +392,15 @@ void Editorial::ejecutarPasoSimulacion()
     for (int i = 0; i < N_PEDIDOS_PASO && !colaAlmacen.esVacia(); i++) {
         Pedido p = colaAlmacen.desencolar();
         int libro_idx = buscarLibro(p.cod_libro);
-        int stockDisponible = (libro_idx == -1) ? 0 : catalogo[libro_idx].stock;
+        int stockDisponible;
+        // 1. Comprobamos si el libro se encontró
+        if (libro_idx == -1) {
+            // Si no se encontró (índice -1), el stock disponible es 0
+            stockDisponible = 0;
+        } else {
+            // Si se encontró, buscamos en el array 'catalogo' en esa posición y obtenemos su stock.
+            stockDisponible = catalogo[libro_idx].stock;
+        }
 
         if (stockDisponible >= p.unidades) {
             // Hay stock suficiente
@@ -474,7 +479,7 @@ void Editorial::mostrarEstadoSistema()
     for (int i = 0; i < LIBRERIAS; i++) {
         if (!cajas[i].esVacia()) { // 'cajas' es el array de Pilas de la clase Editorial
             cout << "Libreria " << i << ": ";
-            cajas[i].mostrar(); // Usamos el método mostrar() de Pila
+            cajas[i].mostrar(); // método mostrar() de Pila
             cout << endl;
             algunaCajaConPedidos = true;
         }
@@ -499,10 +504,10 @@ void Editorial::verContenidoCaja(int id_libreria)
         return;
     }
 
-    // 2. Imprimir el título, tal como en la imagen
+    // 2. Imprimir el título
     cout << "\n== Caja libreria " << id_libreria << " (top -> bottom) ==" << endl;
 
-    // 3. Imprimir la cabecera de la tabla (idéntica a la de las colas)
+    // 3. Imprimir la cabecera de la tabla
     cout << "---------------------------------------------------------" << endl;
     cout << left << setw(6) << "Lib"
          << setw(10) << "Id"
